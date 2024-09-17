@@ -81,44 +81,6 @@
     return NO;
 }
 
-// This ensures that only RFC 1918 IPv4 addresses can be passed to
-// the Add PC dialog. This is required to comply with Apple App Store
-// Guideline 4.2.7a.
-+ (BOOL) isProhibitedAddress:(NSString*)address {
-#ifdef ENABLE_APP_STORE_RESTRICTIONS
-    struct addrinfo hints;
-    struct addrinfo* result;
-    int err;
-    
-    // We're explicitly using AF_INET here because we don't want to
-    // ever receive a synthesized IPv6 address here, even on NAT64.
-    // IPv6 addresses are not restricted here because we cannot easily
-    // tell whether they are local or not.
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;
-    err = getaddrinfo([address UTF8String], NULL, &hints, &result);
-    if (err != 0 || result == NULL) {
-        Log(LOG_W, @"getaddrinfo(%@) failed: %d", address, err);
-        return NO;
-    }
-    
-    if (result->ai_family != AF_INET) {
-        // This should never happen due to our hints
-        assert(result->ai_family == AF_INET);
-        Log(LOG_W, @"Unexpected address family: %d", result->ai_family);
-        freeaddrinfo(result);
-        return NO;
-    }
-    
-    BOOL ret = ![DiscoveryManager isAddressLAN:((struct sockaddr_in*)result->ai_addr)->sin_addr.s_addr];
-    freeaddrinfo(result);
-
-    return ret;
-#else
-    return NO;
-#endif
-}
-
 - (ServerInfoResponse*) getServerInfoResponseForAddress:(NSString*)address {
     HttpManager* hMan = [[HttpManager alloc] initWithAddress:address httpsPort:0 serverCert:nil];
     ServerInfoResponse* serverInfoResponse = [[ServerInfoResponse alloc] init];
@@ -127,14 +89,6 @@
 }
 
 - (void) discoverHost:(NSString *)hostAddress withCallback:(void (^)(TemporaryHost *, NSString*))callback {
-    BOOL prohibitedAddress = [DiscoveryManager isProhibitedAddress:hostAddress];
-    NSString* prohibitedAddressMessage = [NSString stringWithFormat: @"Moonlight only supports adding PCs on your local network on %s.",
-    #if TARGET_OS_TV
-                                   "tvOS"
-    #else
-                                   "iOS"
-    #endif
-                             ];
     ServerInfoResponse* serverInfoResponse = [self getServerInfoResponseForAddress:hostAddress];
     
     TemporaryHost* host = nil;
@@ -146,40 +100,7 @@
         
         // Check if this is a new PC
         if (![self getHostInDiscovery:host.uuid]) {
-            // Enforce LAN restriction for App Store Guideline 4.2.7a
-            if ([DiscoveryManager isProhibitedAddress:hostAddress]) {
-                // We have a prohibited address. This might be because the user specified their WAN address
-                // instead of their LAN address. If that's the case, we'll try their LAN address and if we
-                // can reach it through that address, we'll allow it.
-                ServerInfoResponse* lanInfo = [self getServerInfoResponseForAddress:host.localAddress];
-                if ([lanInfo isStatusOk]) {
-                    TemporaryHost* lanHost = [[TemporaryHost alloc] init];
-                    [lanInfo populateHost:lanHost];
-                    
-                    if (![lanHost.uuid isEqualToString:host.uuid]) {
-                        // This is a different host, so it's prohibited
-                        prohibitedAddress = YES;
-                    }
-                    else {
-                        // This is the same host that is reachable on the LAN
-                        prohibitedAddress = NO;
-                    }
-                }
-                else {
-                    // LAN request failed, so it's a prohibited address
-                    prohibitedAddress = YES;
-                }
-            }
-            else {
-                // It's an RFC 1918 IPv4 address or IPv6 address which counts as LAN
-                prohibitedAddress = NO;
-            }
-            
-            if (prohibitedAddress) {
-                callback(nil, prohibitedAddressMessage);
-                return;
-            }
-            else if ([DiscoveryManager isAddressLAN:inet_addr([hostAddress UTF8String])]) {
+            if ([DiscoveryManager isAddressLAN:inet_addr([hostAddress UTF8String])]) {
                 // Don't send a STUN request if we're connected to a VPN. We'll likely get the VPN
                 // gateway's external address rather than the external address of the LAN.
                 if (![Utils isActiveNetworkVPN]) {
@@ -201,10 +122,8 @@
         } else {
             callback(host, nil);
         }
-    } else if (!prohibitedAddress) {
-        callback(nil, @"Could not connect to host.\n\nIf you're hosting using GeForce Experience, make sure you've enabled the toggle on the SHIELD tab.\n\nIf you're hosting using Sunshine, ensure it is running properly. If you're using a non-default port, you will need to include that here.");
     } else {
-        callback(nil, prohibitedAddressMessage);
+        callback(nil, @"Could not connect to host.\n\nIf you're hosting using GeForce Experience, make sure you've enabled the toggle on the SHIELD tab.\n\nIf you're hosting using Sunshine, ensure it is running properly. If you're using a non-default port, you will need to include that here.");
     }
 }
 
