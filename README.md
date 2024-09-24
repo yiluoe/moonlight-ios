@@ -13,7 +13,7 @@ Moonlight 也有 [PC 端](https://github.com/moonlight-stream/moonlight-qt) 和 
 * 要在真实设备上运行，您需要在本地修改签名选项:
   * 点击左侧边栏顶部的 "Moonlight"
   * 点击 "Signing & Capabilities" 选项卡
-  * 在 "Targets" 下,  如果是 iOS/iPadOS 选择 "Moonlight", 如果是 tvOS 选择 "Moonlight TV(暂未支持)"
+  * 在 "Targets" 下如果是 iOS/iPadOS 选择 "Moonlight", 如果是 tvOS 选择 "Moonlight TV"
   * 在 "Team" 下拉菜单中, 选择你的账户. 如果没有你的账户名，您需要先使用 Apple 帐户登录 Xcode
   * 将 "Bundle Identifier" 更改为其他内容. 例如 cn.你的名字.moonlight
   * 然后你就可以将你的设备作为目标编译并运行啦～
