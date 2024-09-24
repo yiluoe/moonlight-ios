@@ -18,3 +18,6 @@ Moonlight 也有 [PC 端](https://github.com/moonlight-stream/moonlight-qt) 和 
   * 将 "Bundle Identifier" 更改为其他内容. 例如 cn.你的名字.moonlight
   * 然后你就可以将你的设备作为目标编译并运行啦～
 
+**## 贡献者**
+
+![Contributors](https://contrib.rocks/image?repo=yiluoe/moonlight-ios)
