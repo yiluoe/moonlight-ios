@@ -1,24 +1,20 @@
-# Moonlight iOS/tvOS
+# [![AppVeyor Build Status](https://github.com/yiluoe/moonlight-ios/blob/yiluoe/Limelight/Images.xcassets/AppIcon.appiconset/Other/64x64.png?raw=true)](https://ci.appveyor.com/project/cgutman/moonlight-ios/branch/master) Moonlight(IOS) by yiluoe
 
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/kwv8vpwr457lqn25/branch/master?svg=true)](https://ci.appveyor.com/project/cgutman/moonlight-ios/branch/master)
+IOS版Moonlight可让您将全套游戏和应用程序从功能强大的台式电脑传输到 iOS 设备，例如 IPhone、IPad 和 Apple TV，甚至是 Apple Vision 和 Apple Watch。
 
-[Moonlight for iOS/tvOS](https://moonlight-stream.org) is an open source client for [Sunshine](https://github.com/LizardByte/Sunshine) and NVIDIA GameStream. Moonlight for iOS/tvOS allows you to stream your full collection of games and apps from your powerful desktop computer to your iOS device or Apple TV.
+Moonlight 也有 [PC 端](https://github.com/moonlight-stream/moonlight-qt) 和 [Android 端](https://github.com/moonlight-stream/moonlight-android)。
 
-Moonlight also has a [PC client](https://github.com/moonlight-stream/moonlight-qt) and [Android client](https://github.com/moonlight-stream/moonlight-android).
+## 怎么构建呢？
 
-Check out [the Moonlight wiki](https://github.com/moonlight-stream/moonlight-docs/wiki) for more detailed project information, setup guide, or troubleshooting steps.
+* 从 [App Store 页面](https://apps.apple.com/us/app/xcode/id497799835) 安装 Xcode
+* 运行 `git clone --recursive https://github.com/yiluoe/moonlight-ios`
+  *  如果你已经克隆了仓库那么你可以直接在项目目录下运行 `git submodule update --init --recursive`
+* 在 Xcode 中打开 Moonlight.xcodeproj
+* 要在真实设备上运行，您需要在本地修改签名选项:
+  * 点击左侧边栏顶部的 "Moonlight"
+  * 点击 "Signing & Capabilities" 选项卡
+  * 在 "Targets" 下,  如果是 iOS/iPadOS 选择 "Moonlight", 如果是 tvOS 选择 "Moonlight TV(暂未支持)"
+  * 在 "Team" 下拉菜单中, 选择你的账户. 如果没有你的账户名，您需要先使用 Apple 帐户登录 Xcode
+  * 将 "Bundle Identifier" 更改为其他内容. 例如 cn.你的名字.moonlight
+  * 然后你就可以将你的设备作为目标编译并运行啦～
 
-[![Moonlight for iOS and tvOS](https://moonlight-stream.org/images/App_Store_Badge_135x40.svg)](https://apps.apple.com/us/app/moonlight-game-streaming/id1000551566)
-
-## Building
-* Install Xcode from the [App Store page](https://apps.apple.com/us/app/xcode/id497799835)
-* Run `git clone --recursive https://github.com/moonlight-stream/moonlight-ios.git`
-  *  If you've already clone the repo without `--recursive`, run `git submodule update --init --recursive`
-* Open Moonlight.xcodeproj in Xcode
-* To run on a real device, you will need to locally modify the signing options:
-    * Click on "Moonlight" at the top of the left sidebar
-    * Click on the "Signing & Capabilities" tab
-    * Under "Targets", select "Moonlight" (for iOS/iPadOS) or "Moonlight TV" (for tvOS)
-    * In the "Team" dropdown, select your name. If your name doesn't appear, you may need to sign into Xcode with your Apple account.
-    * Change the "Bundle Identifier" to something different. You can add your name or some random letters to make it unique.
-    * Now you can select your Apple device in the top bar as a target and click the Play button to run.
