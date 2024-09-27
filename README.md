@@ -1,4 +1,4 @@
-# [![AppVeyor Build Status](https://github.com/yiluoe/moonlight-ios/blob/yiluoe/Limelight/Images.xcassets/AppIcon.appiconset/Other/64x64.png?raw=true)](https://ci.appveyor.com/project/cgutman/moonlight-ios/branch/master) Moonlight(IOS) by yiluoe
+# [![AppVeyor Build Status](https://github.com/yiluoe/moonlight-ios/blob/yiluoe/Limelight/Images.xcassets/AppIcon.appiconset/Other/64x64.png?raw=true)](https://ci.appveyor.com/project/cgutman/moonlight-ios/branch/master) Moonlight(yiluoe)
 
 IOS版Moonlight可让您将全套游戏和应用程序从功能强大的台式电脑传输到 iOS 设备，例如 IPhone、IPad 和 Apple TV，甚至是 Apple Vision 和 Apple Watch。
 
